@@ -1,0 +1,220 @@
+/* rpx 换算：750rpx = 100vw；宽屏时定格为约 600px 卡片（--u = 0.8px） */
+:root {
+  --u: calc(100vw / 750);
+}
+@media (min-width: 751px) {
+  :root {
+    --u: 0.8px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.page-backdrop {
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.sheet {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: calc(var(--u) * 1100);
+  background: #f7faff;
+  border-radius: calc(var(--u) * 50) calc(var(--u) * 50) 0 0;
+  padding-top: calc(var(--u) * 100);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 顶部半凸圆形图标（原版为后端配置图片，此处用渐变圆 + 白色楼宇 SVG 替代） */
+.sheet-icon {
+  position: absolute;
+  top: calc(var(--u) * -60);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--u) * 120);
+  height: calc(var(--u) * 120);
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2549b4, #6f8fe8);
+  color: #fff;
+}
+.sheet-icon svg {
+  width: 60%;
+  height: 60%;
+}
+
+.tabs {
+  display: flex;
+}
+
+.tab {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #99999b;
+  font-size: calc(var(--u) * 28);
+  font-weight: 400;
+  line-height: calc(var(--u) * 40);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Tab 之间分隔线（原版 .tab-item1::after，1rpx × 44rpx #ccc） */
+.tab:last-child::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(var(--u) * 35);
+  width: 1px;
+  height: calc(var(--u) * 44);
+  background: #ccc;
+}
+
+.tab.tab-active {
+  color: #2549b4;
+  font-weight: 500;
+}
+
+.tab-icon {
+  display: flex;
+  height: calc(var(--u) * 50);
+  width: calc(var(--u) * 71);
+  margin-bottom: calc(var(--u) * 30);
+}
+.tab-icon svg {
+  width: 100%;
+  height: 100%;
+}
+/* 原版 .tab-icon0 激活态 65×65rpx */
+.tab[data-tab='0'].tab-active .tab-icon {
+  height: calc(var(--u) * 65);
+  width: calc(var(--u) * 65);
+}
+
+.code-container {
+  box-sizing: border-box;
+  padding-top: calc(var(--u) * 80);
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 会员 Tab 附加文字（原版 .code-text，仅 memberCode 时显示） */
+.code-text {
+  color: #330;
+  font-size: calc(var(--u) * 32);
+  font-weight: 500;
+  line-height: calc(var(--u) * 45);
+  margin-bottom: calc(var(--u) * 10);
+  text-align: center;
+  width: 100%;
+}
+
+.code-card {
+  position: relative;
+  width: calc(var(--u) * 590);
+  height: calc(var(--u) * 590);
+  background: #edf4fe;
+  border-radius: calc(var(--u) * 20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* canvas 渲染（无图片元素 → 无长按保存/点击下载交互） */
+.qr-canvas {
+  width: calc(var(--u) * 530);
+  height: calc(var(--u) * 524);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 原版 .error-msg：绝对定位覆盖二维码区 */
+.error-msg {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  padding: 0 calc(var(--u) * 30);
+  text-align: center;
+  color: #e33;
+  font-size: calc(var(--u) * 26);
+}
+
+/* 原版 .reload-box：倒计时行「N秒后刷新」 */
+.countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #99999b;
+  font-size: calc(var(--u) * 28);
+  margin-top: calc(var(--u) * 40);
+  width: 100%;
+}
+
+/* 刷新按钮行（原版 .reload-box + uni-icons reload #2549b4 20px） */
+.refresh-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: calc(var(--u) * 40);
+  width: 100%;
+  padding: calc(var(--u) * 10);
+  border: none;
+  background: none;
+  color: #99999b;
+  font-size: calc(var(--u) * 28);
+  font-family: inherit;
+  cursor: pointer;
+}
+.refresh-row:disabled {
+  cursor: default;
+}
+
+.icon-reload {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  margin-right: calc(var(--u) * 10);
+  color: #2549b4;
+}
+.icon-reload svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 原版 .icon-reload-anima：刷新中旋转 */
+.icon-reload.icon-reload-anima {
+  animation: rotate 1s linear infinite;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
